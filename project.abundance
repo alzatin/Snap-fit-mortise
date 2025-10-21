@@ -1,0 +1,15 @@
+{
+    "atomType": "Molecule",
+    "name": "Snap-fit-mortise",
+    "x": 0,
+    "y": 0,
+    "uniqueID": "779d66cf-ca7d-42d5-9412-22b8c1017c80",
+    "ioValues": [],
+    "topLevel": true,
+    "allAtoms": [],
+    "allConnectors": [],
+    "unitsKey": "MM",
+    "fileTypeVersion": 1,
+    "compiledBom": {},
+    "filetypeVersion": 1
+}
