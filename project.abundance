@@ -1,15 +1,24 @@
 {
-    "atomType": "Molecule",
-    "name": "Snap-fit-mortise",
-    "x": 0,
-    "y": 0,
-    "uniqueID": "779d66cf-ca7d-42d5-9412-22b8c1017c80",
-    "ioValues": [],
-    "topLevel": true,
-    "allAtoms": [],
-    "allConnectors": [],
-    "unitsKey": "MM",
-    "fileTypeVersion": 1,
-    "compiledBom": {},
-    "filetypeVersion": 1
+  "atomType": "Molecule",
+  "name": "Snap-fit-mortise",
+  "x": 0,
+  "y": 0,
+  "uniqueID": "779d66cf-ca7d-42d5-9412-22b8c1017c80",
+  "ioValues": [],
+  "topLevel": true,
+  "allAtoms": [
+    {
+      "atomType": "Output",
+      "name": "Output",
+      "x": 0.98,
+      "y": 0.5,
+      "uniqueID": "82454b26-024e-4730-ab9a-a465ab26af5b",
+      "ioValues": []
+    }
+  ],
+  "allConnectors": [],
+  "unitsKey": "MM",
+  "fileTypeVersion": 1,
+  "compiledBom": {},
+  "filetypeVersion": 1
 }
