@@ -54,27 +54,28 @@
         {
           "atomType": "Extrude",
           "name": "Extrude",
-          "x": 0.3136320305052431,
-          "y": 0.531055900621118,
+          "x": 0.3155386081982841,
+          "y": 0.5403726708074534,
           "uniqueID": "dd2d0871-1486-463a-993f-f9407fd63f8e",
           "ioValues": [
             {
               "name": "height",
-              "ioValue": 3,
-              "currentEquation": "3"
+              "ioValue": 5,
+              "currentEquation": "5"
             }
           ]
         },
         {
           "atomType": "Code",
           "name": "Code",
-          "x": 0.6272640610104862,
-          "y": 0.49689440993788814,
+          "x": 0.6158245948522402,
+          "y": 0.5248447204968945,
           "uniqueID": "a9a21ec9-5df1-4918-b3b4-e704c5fbbfbf",
           "ioValues": [
             {
               "name": "dist",
-              "ioValue": 5
+              "ioValue": 5,
+              "currentEquation": "5"
             },
             {
               "name": "height",
@@ -83,8 +84,8 @@
             },
             {
               "name": "dovetailWidth",
-              "ioValue": 5,
-              "currentEquation": "5"
+              "ioValue": 7,
+              "currentEquation": "7"
             },
             {
               "name": "dovetailHeight",
@@ -98,13 +99,13 @@
             }
           ],
           "codeVersion": 1,
-          "code": "\n      const Inputs = [\n       {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n      {inputName: \"dist\", type: \"number\", defaultValue: 5},\n        {inputName: \"height\", type: \"number\", defaultValue: 10},\n         {inputName: \"dovetailWidth\", type: \"number\", defaultValue: 3},\n  {inputName: \"dovetailHeight\", type: \"number\", defaultValue: 2},\n  {inputName: \"dovetailOffset\", type: \"number\", defaultValue: 1}\n      ]\n      //This defines the molecules inputs and creates variables with the same names which can be referenced in the code\n\n      //Gets the shape from the library - no need to clone or access geometry directly\n      let importedShape = library[shape]\n\n      //Use the built-in Move function to move the shape in the X direction\n      let movedShape = await Move(importedShape, dist, 0, 0)\n\n      //Use the built-in Rotate function to rotate the shape\n      let rotatedShape = await Rotate(importedShape, 0, 45, 0)\n\n      //Use the built-in Scale function to make the shape smaller\n      let scaledShape = await Scale(importedShape, 0.8)\n\n      //Console.log works for debugging to better see what is happening under the hood\n      console.log(\"Original shape bounds:\", GetBounds(importedShape))\n      console.log(\"Moved shape bounds:\", GetBounds(movedShape))\n\n      const newPlane = new replicad.Plane().pivot(0, 'Y')\n\n// 1. Draw the full hexagon\nlet hexagon = replicad.drawPolysides(dovetailWidth, 6, 0);\n\n// 2. Draw a rectangle to cover half the hexagon (e.g., left side)\nlet halfRect = replicad.drawRectangle(dovetailWidth, dovetailWidth*2).translate([dovetailWidth/2, 0]);\n\n// 3. Intersect to get half-hexagon (or use Subtract for the other half)\nlet halfHexagon = hexagon.cut(halfRect);\n\n// 4. Extrude the half-hexagon\nlet dovetailCut = halfHexagon.sketchOnPlane(newPlane).extrude(height + 1)\n     \n// 4. Position the dovetail cut (centered, adjust as needed)\nlet bounds = importedShape.geometry[0].boundingBox.bounds\nconsole.log(bounds)\nconst min = bounds[0];\nconst max = bounds[1];\n// For the right end (max X)\nlet dovetailX = max[0] - dovetailWidth / 2; // aligns the flat face with the end\nlet dovetailY = (min[1] + max[1]) / 2;\n\nlet positionedDovetail = dovetailCut.translate([dovetailX, dovetailY, 0]);\n\n      //Wrap the raw replicad geometry in our assembly format\n      let shape2 = {\n          geometry: [importedShape.geometry[0].cut(positionedDovetail)],\n          dimension: \"3D\",\n          tags: [\"createdShape\"],\n          color: '#A3CE5B',\n          plane: newPlane,\n          bom: []\n      }\n\n      //Use the built-in Fillet function to round the edges\n      let filletedShape = await Fillet(shape2, 0.5)\n\n      //Use the built-in Chamfer function to bevel the edges  \n      let chamferedShape = await Chamfer(movedShape, 0.3)\n\n      //Use the built-in Assembly function to combine multiple shapes\n      let finalAssembly = await Assembly([rotatedShape, scaledShape, filletedShape, chamferedShape])\n\n      //You can also create boolean operations using Intersect\n      //let intersection = await Intersect(movedShape, rotatedShape)\n\n      return shape2\n\n      /**\n      Built-in Functions Available:\n      - Move(geometry, x, y, z) - Move a shape in 3D space\n      - Rotate(geometry, x, y, z) - Rotate a shape around X, Y, Z axes (degrees)\n      - Scale(geometry, factor) - Scale a shape by a factor\n      - Assembly([shapes]) - Combine multiple shapes into an assembly\n      - Intersect(shape1, shape2) - Boolean intersection of two shapes\n      - GetBounds(geometry) - Get the bounding box of a shape\n      - Fillet(geometry, radius) - Round edges with specified radius\n      - Chamfer(geometry, size) - Bevel edges with specified size\n\n      To Use the Code Atom, enter your inputs to the input list as an object array:\n      const Inputs = [\n        {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n        {inputName: \"dist\", type: \"number\", defaultValue: 5},\n        {inputName: \"height\", type: \"number\", defaultValue: 10}\n      ]\n\n      Access imported geometry using library[inputName] - the built-in functions handle \n      the complexity of accessing geometry arrays and maintaining metadata automatically.\n\n      Simple Example - Move a shape:\n         const Inputs = [\n          {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n          {inputName: \"x\", type: \"number\", defaultValue: 5}\n        ]\n        let movedShape = await Move(library[shape], x, 0, 0)\n        return movedShape\n      */\n      "
+          "code": "\n      const Inputs = [\n       {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n      {inputName: \"dist\", type: \"number\", defaultValue: 5},\n        {inputName: \"height\", type: \"number\", defaultValue: 10},\n         {inputName: \"dovetailWidth\", type: \"number\", defaultValue: 3},\n  {inputName: \"dovetailHeight\", type: \"number\", defaultValue: 2},\n  {inputName: \"dovetailOffset\", type: \"number\", defaultValue: 1}\n      ]\n      //This defines the molecules inputs and creates variables with the same names which can be referenced in the code\n\n      //Gets the shape from the library - no need to clone or access geometry directly\n      let importedShape = library[shape]\n\n      //Use the built-in Move function to move the shape in the X direction\n      let movedShape = await Move(importedShape, dist, 0, 0)\n\n      //Use the built-in Rotate function to rotate the shape\n      let rotatedShape = await Rotate(importedShape, 0, 45, 0)\n\n      //Use the built-in Scale function to make the shape smaller\n      let scaledShape = await Scale(importedShape, 0.8)\n\n      //Console.log works for debugging to better see what is happening under the hood\n      console.log(\"Original shape bounds:\", GetBounds(importedShape))\n      console.log(\"Moved shape bounds:\", GetBounds(movedShape))\n\n      const newPlane = new replicad.Plane().pivot(0, 'Y')\n\n// 1. Draw the full hexagon\nlet hexagon = replicad.drawPolysides(dovetailWidth, 6, 0);\n\n// 2. Draw a rectangle to cover half the hexagon (e.g., left side)\nlet halfRect = replicad.drawRectangle(dovetailWidth, dovetailWidth*2).translate([dovetailWidth/2, 0]);\n\n// 3. Intersect to get half-hexagon (or use Subtract for the other half)\nlet halfHexagon = hexagon.cut(halfRect);\n\n// 4. Extrude the half-hexagon\nlet dovetailCut = halfHexagon.sketchOnPlane(newPlane).extrude(height + 1)\n     \n// 4. Position the dovetail cut (centered, adjust as needed)\nlet bounds = importedShape.geometry[0].boundingBox.bounds\nconsole.log(bounds)\nconst min = bounds[0];\nconst max = bounds[1];\n// For the right end (max X), same orientation as left\nlet dovetailX = max[0] - min[0] + dovetailWidth /2; // aligns the flat face with the right end\nlet dovetailY = (min[1] + max[1]) / 2;\n\nlet positionedDovetail = dovetailCut.translate([dovetailX, dovetailY, 0]);\n\n      //Wrap the raw replicad geometry in our assembly format\n      let shape2 = {\n          geometry: [importedShape.geometry[0].cut(positionedDovetail)],\n          dimension: \"3D\",\n          tags: [\"createdShape\"],\n          color: '#A3CE5B',\n          plane: newPlane,\n          bom: []\n      }\n\n      //Use the built-in Fillet function to round the edges\n      let filletedShape = await Fillet(shape2, 0.5)\n\n      //Use the built-in Chamfer function to bevel the edges  \n      let chamferedShape = await Chamfer(movedShape, 0.3)\n\n      //Use the built-in Assembly function to combine multiple shapes\n      let finalAssembly = await Assembly([rotatedShape, scaledShape, filletedShape, chamferedShape])\n\n      //You can also create boolean operations using Intersect\n      //let intersection = await Intersect(movedShape, rotatedShape)\n\n      return shape2\n\n      /**\n      Built-in Functions Available:\n      - Move(geometry, x, y, z) - Move a shape in 3D space\n      - Rotate(geometry, x, y, z) - Rotate a shape around X, Y, Z axes (degrees)\n      - Scale(geometry, factor) - Scale a shape by a factor\n      - Assembly([shapes]) - Combine multiple shapes into an assembly\n      - Intersect(shape1, shape2) - Boolean intersection of two shapes\n      - GetBounds(geometry) - Get the bounding box of a shape\n      - Fillet(geometry, radius) - Round edges with specified radius\n      - Chamfer(geometry, size) - Bevel edges with specified size\n\n      To Use the Code Atom, enter your inputs to the input list as an object array:\n      const Inputs = [\n        {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n        {inputName: \"dist\", type: \"number\", defaultValue: 5},\n        {inputName: \"height\", type: \"number\", defaultValue: 10}\n      ]\n\n      Access imported geometry using library[inputName] - the built-in functions handle \n      the complexity of accessing geometry arrays and maintaining metadata automatically.\n\n      Simple Example - Move a shape:\n         const Inputs = [\n          {inputName: \"shape\", type: \"geometry\", defaultValue: null},\n          {inputName: \"x\", type: \"number\", defaultValue: 5}\n        ]\n        let movedShape = await Move(library[shape], x, 0, 0)\n        return movedShape\n      */\n      "
         },
         {
           "atomType": "Move",
           "name": "Move",
-          "x": 0.4213536701620591,
-          "y": 0.4440993788819876,
+          "x": 0.4747378455672069,
+          "y": 0.40062111801242234,
           "uniqueID": "84fa6381-c7d7-478f-aac7-9fdac7939f1e",
           "ioValues": [
             {
